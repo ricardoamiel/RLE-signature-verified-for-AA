@@ -21,10 +21,8 @@ logs/
 *.tmp
 
 # --- Output / Training runs ---
-runs/
-out/
-plots/
-checkpoints/
+#runs/
+#out/
 *.pt
 
 # --- FastAPI / uploads ---

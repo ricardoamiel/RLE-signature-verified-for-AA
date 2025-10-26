@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-10-26T05:03:48.161718",
+  "checkpoint": "runs/siamese_split/best.pt",
+  "calibration_file": "runs/siamese_split/calibration.json",
+  "threshold_used": 0.018987,
+  "test_auc": 1.0,
+  "test_eer": 0.0,
+  "metrics_at_threshold": {
+    "tp": 600,
+    "tn": 487,
+    "fp": 113,
+    "fn": 0,
+    "precision": 0.8415147265077139,
+    "recall": 1.0,
+    "f1": 0.913937547600914,
+    "accuracy": 0.9058333333333334,
+    "fpr": 0.18833333333333332,
+    "fnr": 0.0,
+    "stp_proxy": 0.5941666666666666
+  },
+  "pairs_per_writer": 120,
+  "batch_size": 32,
+  "img_size": 224,
+  "emb_dim": 256
+}

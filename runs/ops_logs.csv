@@ -3,3 +3,10 @@ timestamp,doc_id,client_id,writer_id,ref_path,probe_path,score,threshold_high,th
 2025-10-26T17:45:00.753021,,,1,signatures/full_org/original_1_1.png,forgeries_1_2.png,0.00541,0.85,0.8,revision_manual,best.pt,calibration.json,0,ok
 2025-10-26T17:46:35.515214,,,9,signatures/full_org/original_9_1.png,forgeries_9_8.png,0.000381,0.85,0.8,revision_manual,best.pt,calibration.json,0,ok
 2025-10-26T17:47:02.302907,,,52,signatures/full_org/original_52_1.png,original_52_5.png,0.992508,0.85,0.8,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T17:57:33.360070,,,,original_9_8.png,original_9_5.png,0.993352,0.85,0.8,auto_validado,best.pt,calibration.json,29,ok
+2025-10-26T17:57:45.686126,,,,signatures/full_org/original_3_10.png,signatures/full_org/original_3_5.png,0.993075,0.85,0.8,auto_validado,best.pt,calibration.json,15,ok
+2025-10-26T17:57:45.697095,,,,signatures/full_org/original_3_10.png,signatures/full_forg/forgeries_3_10.png,0.000469,0.85,0.8,revision_manual,best.pt,calibration.json,10,ok
+2025-10-26T17:57:45.706439,,,,signatures/full_org/original_19_10.png,signatures/full_org/original_19_14.png,0.996816,0.85,0.8,auto_validado,best.pt,calibration.json,8,ok
+2025-10-26T17:57:45.715532,,,,signatures/full_org/original_19_10.png,signatures/full_forg/forgeries_19_10.png,0.003347,0.85,0.8,revision_manual,best.pt,calibration.json,8,ok
+2025-10-26T17:58:03.751730,,,1,signatures/full_org/original_1_1.png,original_1_5.png,0.996378,0.85,0.8,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T17:58:14.969206,,,1,signatures/full_org/original_1_1.png,forgeries_1_2.png,0.00541,0.85,0.8,revision_manual,best.pt,calibration.json,0,ok

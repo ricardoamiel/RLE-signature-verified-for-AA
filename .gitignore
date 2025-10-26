@@ -1,0 +1,36 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.pyd
+*.egg-info/
+.env
+.venv
+venv/
+.env/
+*.ipynb_checkpoints/
+
+# --- Cache & logs ---
+logs/
+*.log
+.DS_Store
+.cache/
+*.csv
+*.json
+*.tmp
+
+# --- Output / Training runs ---
+runs/
+out/
+plots/
+checkpoints/
+*.pt
+
+# --- FastAPI / uploads ---
+uploads/
+tmp/
+out/pair_result.json
+
+# --- Signature datasets ---
+signatures/

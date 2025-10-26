@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Verificación de Firmas – Siamese</title>
+<style>
+  :root { --primary:#3b82f6; --dark:#1e40af; --light:#dbeafe; --bg:#f8fafc; --muted:#64748b; }
+  *{box-sizing:border-box}
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); margin: 0; }
+  .wrap { max-width: 1000px; margin: 28px auto; padding: 0 16px; }
+  .card { background: white; border-radius: 16px; box-shadow: 0 10px 26px rgba(0,0,0,.06); padding: 22px; }
+  h1 { margin: 0 0 6px; color: var(--dark); letter-spacing:.2px }
+  p.lead { color: var(--muted); margin-top: 0; }
+  .tabs { display:flex; gap:8px; margin:14px 0 18px; flex-wrap:wrap }
+  .tab { border:1px solid #e5e7eb; border-radius:10px; padding:10px 14px; cursor:pointer; background:#fff; color:#111827; font-weight:600 }
+  .tab.active { background: var(--light); border-color: var(--primary); color: var(--dark) }
+  .pane { display:none }
+  .pane.active { display:block }
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+  .row-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+  .row-2 { display:grid; grid-template-columns: repeat(2,1fr); gap:16px; }
+  .field { display:flex; flex-direction:column; gap:8px; }
+  label { font-weight:600; color:#334155 }
+  input[type="file"], input[type="text"], input[type="number"] {
+    padding: 10px; border: 1px solid #e5e7eb; border-radius: 10px; background:#fff;
+  }
+  .btn { background: var(--primary); color: white; border: 0; border-radius: 10px; padding: 12px 16px;
+         cursor: pointer; font-weight: 700; }
+  .btn:disabled { opacity: .6; cursor: not-allowed; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .result { margin-top: 16px; padding: 14px; border-radius: 10px; background: #eff6ff; border:1px solid #dbeafe }
+  .pill { display:inline-block; padding:4px 10px; border-radius:999px; font-weight:700; }
+  .ok { background:#bae6fd; color:#064e3b }
+  .mid { background:#c7d2fe; color:#3730a3 }
+  .warn { background:#fde68a; color:#7c5a00 }
+  .err { background:#fecaca; color:#7f1d1d }
+  .preview { max-width:100%; border:1px solid #e5e7eb; border-radius:10px; display:none; background:#fff; }
+  .footer { margin-top:18px; color:var(--muted); font-size:13px }
+  code { background:#f1f5f9; padding:2px 6px; border-radius:6px }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Verificación de Firmas Automation Anywhere</h1>
+    <p class="lead">Modelo siamés. Umbral por defecto: <b>0.85</b> (alto) y <b>0.80</b> (bajo para revisión rápida). Puedes ajustarlos en cada formulario.</p>
+
+    <div class="tabs">
+      <button class="tab active" data-pane="pane-a">A) Dos imágenes</button>
+      <button class="tab" data-pane="pane-b">B) CSV de pares</button>
+      <button class="tab" data-pane="pane-c">C) Una imagen + writer_id</button>
+    </div>
+
+    <!-- ========== PANE A: /score ========== -->
+    <div id="pane-a" class="pane active">
+      <form id="frmA">
+        <div class="grid-2">
+          <div class="field">
+            <label>Firma de referencia (genuina)</label>
+            <input type="file" name="file1" accept="image/*" required>
+            <span class="muted">Ej. original_19_10.png</span>
+            <img id="prevA1" alt="preview ref" class="preview">
+          </div>
+          <div class="field">
+            <label>Firma a validar (documento)</label>
+            <input type="file" name="file2" accept="image/*" required>
+            <span class="muted">Ej. recorte del documento escaneado</span>
+            <img id="prevA2" alt="preview doc" class="preview">
+          </div>
+        </div>
+        <div class="row-3" style="margin-top:12px">
+          <div class="field">
+            <label>High threshold</label>
+            <input type="number" name="override_threshold" step="0.001" value="0.85">
+            <span class="muted">≥ High → auto-validado</span>
+          </div>
+          <div class="field">
+            <label>Low threshold</label>
+            <input type="number" name="low_threshold" step="0.001" value="0.80">
+            <span class="muted">[Low, High) → revisión rápida</span>
+          </div>
+          <div class="field">
+            <label>Doc / Cliente (opcionales)</label>
+            <input type="text" name="doc_id" placeholder="DOC-2025-001">
+            <input type="text" name="client_id" placeholder="Cliente-55">
+            <input type="text" name="writer_id" placeholder="55">
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+          <button class="btn" id="btnA" type="submit">Validar</button>
+          <span class="muted">Se registra en el log para el dashboard.</span>
+        </div>
+      </form>
+      <div id="resA" class="result" style="display:none;"></div>
+    </div>
+
+    <!-- ========== PANE B: /score_csv_upload ========== -->
+    <div id="pane-b" class="pane">
+      <form id="frmB">
+        <div class="row-2">
+          <div class="field">
+            <label>CSV de pares (columnas: <code>img1,img2</code>)</label>
+            <input type="file" name="csv_file" accept=".csv" required>
+            <span class="muted">Rutas accesibles por el servidor</span>
+          </div>
+          <div class="field">
+            <label>Umbrales</label>
+            <input type="number" name="override_threshold" step="0.001" value="0.85">
+            <input type="number" name="low_threshold" step="0.001" value="0.80">
+            <span class="muted">Se aplican a todas las filas</span>
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+          <button class="btn" id="btnB" type="submit">Procesar CSV</button>
+          <span class="muted">Devuelve un CSV con <code>score</code>, <code>decision</code>, <code>thresholds</code>.</span>
+        </div>
+      </form>
+      <div id="resB" class="result" style="display:none;"></div>
+    </div>
+
+    <!-- ========== PANE C: /score_writer ========== -->
+    <div id="pane-c" class="pane">
+      <form id="frmC">
+        <div class="grid-2">
+          <div class="field">
+            <label>Firma a validar (documento)</label>
+            <input type="file" name="probe" accept="image/*" required>
+            <img id="prevC" alt="preview doc" class="preview" style="max-width:420px; margin-top:8px;">
+          </div>
+          <div class="field">
+            <label>Writer ID (cliente)</label>
+            <input type="number" name="writer_id" placeholder="55" required>
+            <span class="muted">Se buscará la genuina en <code>out/signatures_index.csv</code></span>
+          </div>
+        </div>
+        <div class="row-3" style="margin-top:12px">
+          <div class="field">
+            <label>Ref sample id (opcional)</label>
+            <input type="number" name="ref_sample_id" placeholder="1">
+          </div>
+          <div class="field">
+            <label>High / Low threshold</label>
+            <input type="number" name="override_threshold" step="0.001" value="0.85">
+            <input type="number" name="low_threshold" step="0.001" value="0.80">
+          </div>
+          <div class="field">
+            <label>Doc / Cliente (opcionales)</label>
+            <input type="text" name="doc_id" placeholder="DOC-2025-002">
+            <input type="text" name="client_id" placeholder="Cliente-55">
+          </div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+          <button class="btn" id="btnC" type="submit">Validar por writer</button>
+          <span class="muted">Usa la genuina de referencia del writer</span>
+        </div>
+      </form>
+      <div id="resC" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="footer">© Verificación de Firmas · Automation Anywhere</div>
+  </div>
+</div>
+
+<script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  const panes = document.querySelectorAll('.pane');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panes.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.pane).classList.add('active');
+  }));
+
+  // Helpers
+  const show = (el, html) => { el.innerHTML = html; el.style.display = 'block'; };
+
+  // Previews Pane A
+  const fileA1 = document.querySelector('#frmA input[name="file1"]');
+  const fileA2 = document.querySelector('#frmA input[name="file2"]');
+  const prevA1 = document.getElementById('prevA1');
+  const prevA2 = document.getElementById('prevA2');
+  [ [fileA1, prevA1], [fileA2, prevA2] ].forEach(([inp, img]) => {
+    inp.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (f) { img.src = URL.createObjectURL(f); img.style.display='block'; }
+    });
+  });
+
+  // Preview Pane C
+  const fileC = document.querySelector('#frmC input[name="probe"]');
+  const prevC = document.getElementById('prevC');
+  fileC.addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (f) { prevC.src = URL.createObjectURL(f); prevC.style.display='block'; }
+  });
+
+  // ---- Pane A submit ----
+  const frmA = document.getElementById('frmA'), btnA = document.getElementById('btnA'), resA = document.getElementById('resA');
+  frmA.addEventListener('submit', async (e) => {
+    e.preventDefault(); resA.style.display='none'; btnA.disabled=true; btnA.textContent='Procesando...';
+    try{
+      const fd = new FormData(frmA);
+      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
+      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      const rsp = await fetch('/score', { method:'POST', body: fd });
+      const j = await rsp.json();
+      const badge = j.decision === 'auto_validado'
+        ? '<span class="pill ok">AUTO-VALIDADO</span>'
+        : (j.decision === 'revision_rapida'
+            ? '<span class="pill mid">REVISIÓN RÁPIDA</span>'
+            : '<span class="pill warn">REVISIÓN MANUAL</span>');
+      show(resA, `
+        <div style="display:flex; gap:12px; align-items:center;">
+          ${badge}
+          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold} · <b>Low:</b> ${j.threshold_low}</div>
+        </div>
+        <div class="muted" style="margin-top:6px;">Modelo: ${j.model_version} · Calib: ${j.calibration_version} · Lat: ${j.latency_ms} ms</div>
+      `);
+    }catch(err){ show(resA, `<span class="pill err">ERROR</span> ${err}`); }
+    finally{ btnA.disabled=false; btnA.textContent='Validar'; }
+  });
+
+  // ---- Pane B submit ----
+  const frmB = document.getElementById('frmB'), btnB = document.getElementById('btnB'), resB = document.getElementById('resB');
+  frmB.addEventListener('submit', async (e) => {
+    e.preventDefault(); resB.style.display='none'; btnB.disabled=true; btnB.textContent='Procesando...';
+    try{
+      const fd = new FormData(frmB);
+      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
+      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      const rsp = await fetch('/score_csv_upload', { method:'POST', body: fd });
+      const j = await rsp.json();
+      show(resB, `
+        <span class="pill ok">CSV PROCESADO</span>
+        <div class="muted" style="margin-top:6px;">
+          Filas: <b>${j.rows}</b> · Avg latencia: <b>${j.avg_latency_ms} ms</b> · Guardado en: <code>${j.saved}</code>
+        </div>
+      `);
+    }catch(err){ show(resB, `<span class="pill err">ERROR</span> ${err}`); }
+    finally{ btnB.disabled=false; btnB.textContent='Procesar CSV'; }
+  });
+
+  // ---- Pane C submit ----
+  const frmC = document.getElementById('frmC'), btnC = document.getElementById('btnC'), resC = document.getElementById('resC');
+  frmC.addEventListener('submit', async (e) => {
+    e.preventDefault(); resC.style.display='none'; btnC.disabled=true; btnC.textContent='Procesando...';
+    try{
+      const fd = new FormData(frmC);
+      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
+      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      const rsp = await fetch('/score_writer', { method:'POST', body: fd });
+      const j = await rsp.json();
+      const badge = j.decision === 'auto_validado'
+        ? '<span class="pill ok">AUTO-VALIDADO</span>'
+        : (j.decision === 'revision_rapida'
+            ? '<span class="pill mid">REVISIÓN RÁPIDA</span>'
+            : '<span class="pill warn">REVISIÓN MANUAL</span>');
+      show(resC, `
+        <div style="display:flex; gap:12px; align-items:center;">
+          ${badge}
+          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold} · <b>Low:</b> ${j.threshold_low}</div>
+        </div>
+        <div class="muted" style="margin-top:6px;">Ref usada: <code>${j.ref_path_used}</code></div>
+      `);
+    }catch(err){ show(resC, `<span class="pill err">ERROR</span> ${err}`); }
+    finally{ btnC.disabled=false; btnC.textContent='Validar por writer'; }
+  });
+</script>
+</body>
+</html>

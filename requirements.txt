@@ -1,0 +1,27 @@
+# Core scientific stack
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.5.2
+scipy==1.14.1
+matplotlib==3.9.2
+pillow==10.4.0
+
+# PyTorch (usa CUDA 12.x si tienes GPU, o CPU-only si no)
+torch==2.3.1
+torchvision==0.18.1
+torchaudio==2.3.1
+
+# FastAPI + Server
+fastapi==0.115.2
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+jinja2==3.1.4
+
+# Utilities
+tqdm==4.66.5
+seaborn==0.13.2
+joblib==1.4.2
+requests==2.32.3
+
+# Plotting + visualization (para utils_plots)
+matplotlib-inline==0.1.7

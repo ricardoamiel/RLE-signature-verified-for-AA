@@ -1,0 +1,24 @@
+timestamp,doc_id,client_id,writer_id,ref_path,probe_path,score,threshold,decision,model_version,calibration_version,latency_ms,status
+2025-10-26T06:07:07.204078,DOC 20021,Mora,19,original_9_8.png,forgeries_9_8.png,0.016861,0.85,revision_manual,best.pt,calibration.json,186,ok
+2025-10-26T06:07:19.843224,DOC 20021,Mora,19,original_9_8.png,original_9_5.png,0.890537,0.85,auto_validado,best.pt,calibration.json,18,ok
+2025-10-26T06:07:50.111731,DOC 20021,,,original_9_8.png,original_9_5.png,0.890537,0.85,auto_validado,best.pt,calibration.json,30,ok
+2025-10-26T06:07:52.214467,,,,original_9_8.png,original_9_5.png,0.890537,0.85,auto_validado,best.pt,calibration.json,11,ok
+2025-10-26T06:08:46.761195,,,,original_9_8.png,original_9_5.png,0.890537,0.85,auto_validado,best.pt,calibration.json,31,ok
+2025-10-26T06:25:08.280317,,EG,1,signatures/full_org/original_1_1.png,original_1_5.png,0.954955,0.85,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T06:25:27.778922,,EG,1,signatures/full_org/original_1_1.png,forgeries_1_2.png,0.004431,0.85,revision_manual,best.pt,calibration.json,0,ok
+2025-10-26T06:25:55.486909,,,,original_9_8.png,original_9_5.png,0.890537,0.85,auto_validado,best.pt,calibration.json,34,ok
+2025-10-26T06:26:26.266926,,,,signatures/full_org/original_3_10.png,signatures/full_org/original_3_5.png,0.979401,0.85,auto_validado,best.pt,calibration.json,55,ok
+2025-10-26T06:26:26.307929,,,,signatures/full_org/original_3_10.png,signatures/full_forg/forgeries_3_10.png,0.002214,0.85,revision_manual,best.pt,calibration.json,39,ok
+2025-10-26T06:26:26.341531,,,,signatures/full_org/original_19_10.png,signatures/full_org/original_19_14.png,0.959655,0.85,auto_validado,best.pt,calibration.json,32,ok
+2025-10-26T06:26:26.364825,,,,signatures/full_org/original_19_10.png,signatures/full_forg/forgeries_19_10.png,0.00334,0.85,revision_manual,best.pt,calibration.json,21,ok
+2025-10-26T06:33:08.204720,,,52,signatures/full_org/original_52_1.png,original_52_5.png,0.946457,0.85,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T06:33:37.175380,,,4,signatures/full_org/original_4_4.png,original_4_1.png,0.894133,0.85,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T06:49:45.784686,,,52,signatures/full_org/original_52_1.png,original_52_5.png,0.946457,0.85,0.8,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T06:50:06.526023,,,52,signatures/full_org/original_52_1.png,original_52_5.png,0.946457,0.85,0.8,auto_validado,best.pt,calibration.json,0,ok
+2025-10-26T06:50:19.746374,,,,original_9_8.png,original_9_5.png,0.890537,0.85,0.8,auto_validado,best.pt,calibration.json,18,ok
+2025-10-26T06:52:07.152698,,,,signatures/full_org/original_3_10.png,signatures/full_org/original_3_5.png,0.979401,0.85,0.8,auto_validado,best.pt,calibration.json,28,ok
+2025-10-26T06:52:07.164617,,,,signatures/full_org/original_3_10.png,signatures/full_forg/forgeries_3_10.png,0.002214,0.85,0.8,revision_manual,best.pt,calibration.json,10,ok
+2025-10-26T06:52:07.174519,,,,signatures/full_org/original_19_10.png,signatures/full_org/original_19_14.png,0.959655,0.85,0.8,auto_validado,best.pt,calibration.json,8,ok
+2025-10-26T06:52:07.183784,,,,signatures/full_org/original_19_10.png,signatures/full_forg/forgeries_19_10.png,0.00334,0.85,0.8,revision_manual,best.pt,calibration.json,8,ok
+2025-10-26T06:52:36.399714,,,9,signatures/full_org/original_9_1.png,forgeries_9_8.png,0.033031,0.85,0.8,revision_manual,best.pt,calibration.json,0,ok
+2025-10-26T06:53:39.158008,,,9,signatures/full_org/original_9_1.png,original_9_8.png,0.990909,0.85,0.8,auto_validado,best.pt,calibration.json,0,ok

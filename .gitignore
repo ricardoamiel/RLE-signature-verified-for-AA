@@ -16,7 +16,7 @@ logs/
 *.log
 .DS_Store
 .cache/
-*.csv
+#*.csv
 *.json
 *.tmp
 
@@ -28,7 +28,7 @@ logs/
 # --- FastAPI / uploads ---
 uploads/
 tmp/
-out/pair_result.json
+#out/pair_result.json
 
 # --- Signature datasets ---
 signatures/

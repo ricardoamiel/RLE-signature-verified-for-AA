@@ -1,0 +1,20 @@
+{
+  "score": 0.998548,
+  "threshold": 0.0035909144207835197,
+  "decision": "auto_validado",
+  "model_checkpoint": "runs/siamese_split/best.pt",
+  "calibration": {
+    "threshold": 0.0035909144207835197,
+    "target_precision": null,
+    "val_auc": null,
+    "created_at": "2025-10-26T13:41:45.260995",
+    "model_checkpoint": null,
+    "auc": 1.0,
+    "eer": 0.0,
+    "prec": 0.8500772797527048,
+    "rec": 1.0
+  },
+  "img1": "signatures/full_org/original_13_10.png",
+  "img2": "signatures/full_org/original_13_12.png",
+  "created_at": "2025-10-26T17:44:03.432745"
+}

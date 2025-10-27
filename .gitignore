@@ -23,7 +23,7 @@ logs/
 # --- Output / Training runs ---
 #runs/
 #out/
-*.pt
+#*.pt
 
 # --- FastAPI / uploads ---
 uploads/

@@ -1,22 +1,38 @@
 {
-  "timestamp": "2025-10-26T18:53:48.038146",
+  "timestamp": "2025-10-26T23:33:44.884231",
   "checkpoint": "runs/siamese_split/best.pt",
-  "calibration_file": "runs/siamese_split/calibration.json",
-  "threshold_used": 0.0035909144207835197,
+  "calibration_file": "runs/siamese_split/calibration_maxstp.json",
+  "thresholds_used": {
+    "p85": 0.00619,
+    "p80": 0.004764
+  },
   "test_auc": 0.9999999999999999,
   "test_eer": 0.0,
-  "metrics_at_threshold": {
+  "metrics_at_p85": {
     "tp": 600,
-    "tn": 522,
-    "fp": 78,
+    "tn": 567,
+    "fp": 33,
     "fn": 0,
-    "precision": 0.8849557522123894,
+    "precision": 0.9478672985781991,
     "recall": 1.0,
-    "f1": 0.9389671361502347,
-    "accuracy": 0.935,
-    "fpr": 0.13,
+    "f1": 0.9732360097323601,
+    "accuracy": 0.9725,
+    "fpr": 0.055,
     "fnr": 0.0,
-    "stp_proxy": 0.565
+    "stp_proxy": 0.5275
+  },
+  "metrics_at_p80": {
+    "tp": 600,
+    "tn": 547,
+    "fp": 53,
+    "fn": 0,
+    "precision": 0.9188361408882083,
+    "recall": 1.0,
+    "f1": 0.9577015163607342,
+    "accuracy": 0.9558333333333333,
+    "fpr": 0.08833333333333333,
+    "fnr": 0.0,
+    "stp_proxy": 0.5441666666666667
   },
   "pairs_per_writer": 120,
   "batch_size": 32,

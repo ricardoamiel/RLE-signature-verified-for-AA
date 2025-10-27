@@ -1,22 +1,38 @@
 {
-  "timestamp": "2025-10-26T05:03:48.161718",
-  "checkpoint": "runs/siamese_split/best.pt",
-  "calibration_file": "runs/siamese_split/calibration.json",
-  "threshold_used": 0.018987,
+  "timestamp": "2025-10-26T23:31:47.715449",
+  "checkpoint": "runs_first_approach/siamese_split/best.pt",
+  "calibration_file": "runs_first_approach/siamese_split/calibration_maxstp.json",
+  "thresholds_used": {
+    "p85": 0.015169,
+    "p80": 0.010649
+  },
   "test_auc": 1.0,
   "test_eer": 0.0,
-  "metrics_at_threshold": {
+  "metrics_at_p85": {
     "tp": 600,
-    "tn": 487,
-    "fp": 113,
+    "tn": 444,
+    "fp": 156,
     "fn": 0,
-    "precision": 0.8415147265077139,
+    "precision": 0.7936507936507936,
     "recall": 1.0,
-    "f1": 0.913937547600914,
-    "accuracy": 0.9058333333333334,
-    "fpr": 0.18833333333333332,
+    "f1": 0.8849557522123894,
+    "accuracy": 0.87,
+    "fpr": 0.26,
     "fnr": 0.0,
-    "stp_proxy": 0.5941666666666666
+    "stp_proxy": 0.63
+  },
+  "metrics_at_p80": {
+    "tp": 600,
+    "tn": 359,
+    "fp": 241,
+    "fn": 0,
+    "precision": 0.713436385255648,
+    "recall": 1.0,
+    "f1": 0.8327550312283136,
+    "accuracy": 0.7991666666666667,
+    "fpr": 0.40166666666666667,
+    "fnr": 0.0,
+    "stp_proxy": 0.7008333333333333
   },
   "pairs_per_writer": 120,
   "batch_size": 32,

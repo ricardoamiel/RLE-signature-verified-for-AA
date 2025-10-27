@@ -1,0 +1,5 @@
+img1,img2,score,threshold_high,threshold_low,policy,decision
+signatures/full_org/original_3_10.png,signatures/full_org/original_3_5.png,0.979401,0.85,0.8,override(dual),auto_validado
+signatures/full_org/original_3_10.png,signatures/full_forg/forgeries_3_10.png,0.002214,0.85,0.8,override(dual),revision_manual
+signatures/full_org/original_19_10.png,signatures/full_org/original_19_14.png,0.959655,0.85,0.8,override(dual),auto_validado
+signatures/full_org/original_19_10.png,signatures/full_forg/forgeries_19_10.png,0.00334,0.85,0.8,override(dual),revision_manual

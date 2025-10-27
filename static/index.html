@@ -22,7 +22,7 @@
   .row-2 { display:grid; grid-template-columns: repeat(2,1fr); gap:16px; }
   .field { display:flex; flex-direction:column; gap:8px; }
   label { font-weight:600; color:#334155 }
-  input[type="file"], input[type="text"], input[type="number"] {
+  input[type="file"], input[type="text"], input[type="number"], select {
     padding: 10px; border: 1px solid #e5e7eb; border-radius: 10px; background:#fff;
   }
   .btn { background: var(--primary); color: white; border: 0; border-radius: 10px; padding: 12px 16px;
@@ -44,7 +44,11 @@
 <div class="wrap">
   <div class="card">
     <h1>Verificación de Firmas Automation Anywhere</h1>
-    <p class="lead">Modelo siamés. Umbral por defecto: <b>0.85</b> (alto) y <b>0.80</b> (bajo para revisión rápida). Puedes ajustarlos en cada formulario.</p>
+    <p class="lead">
+      Modelo siamés. Por defecto se usan dos umbrales: <b>0.85</b> (alto) y <b>0.80</b> (bajo para revisión rápida).
+      Si dejas vacíos los campos de umbral y el backend tiene calibración, se aplicarán automáticamente
+      (globales y, si corresponde, <i>por writer</i>).
+    </p>
 
     <div class="tabs">
       <button class="tab active" data-pane="pane-a">A) Dos imágenes</button>
@@ -71,15 +75,25 @@
         </div>
         <div class="row-3" style="margin-top:12px">
           <div class="field">
-            <label>High threshold</label>
-            <input type="number" name="override_threshold" step="0.001" value="0.85">
-            <span class="muted">≥ High → auto-validado</span>
+            <label>Política</label>
+            <select name="policy">
+              <option value="dual" selected>dual (p85/p80)</option>
+              <option value="p85_only">p85_only</option>
+            </select>
+            <span class="muted">dual = auto-validado ≥ p85; revisión rápida [p80, p85)</span>
           </div>
           <div class="field">
-            <label>Low threshold</label>
-            <input type="number" name="low_threshold" step="0.001" value="0.80">
+            <label>High threshold (override opcional)</label>
+            <input type="number" name="override_threshold_high" step="0.001" value="0.85">
+            <span class="muted">Dejar vacío para usar calibración/defecto</span>
+          </div>
+          <div class="field">
+            <label>Low threshold (override opcional)</label>
+            <input type="number" name="override_threshold_low" step="0.001" value="0.80">
             <span class="muted">[Low, High) → revisión rápida</span>
           </div>
+        </div>
+        <div class="row-3" style="margin-top:12px">
           <div class="field">
             <label>Doc / Cliente (opcionales)</label>
             <input type="text" name="doc_id" placeholder="DOC-2025-001">
@@ -105,15 +119,19 @@
             <span class="muted">Rutas accesibles por el servidor</span>
           </div>
           <div class="field">
-            <label>Umbrales</label>
-            <input type="number" name="override_threshold" step="0.001" value="0.85">
-            <input type="number" name="low_threshold" step="0.001" value="0.80">
-            <span class="muted">Se aplican a todas las filas</span>
+            <label>Política + Umbrales (override opcional)</label>
+            <select name="policy">
+              <option value="dual" selected>dual (p85/p80)</option>
+              <option value="p85_only">p85_only</option>
+            </select>
+            <input type="number" name="override_threshold_high" step="0.001" value="0.85">
+            <input type="number" name="override_threshold_low" step="0.001" value="0.80">
+            <span class="muted">Si los dejas vacíos → calibración/defecto</span>
           </div>
         </div>
         <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
           <button class="btn" id="btnB" type="submit">Procesar CSV</button>
-          <span class="muted">Devuelve un CSV con <code>score</code>, <code>decision</code>, <code>thresholds</code>.</span>
+          <span class="muted">Devuelve CSV con <code>score</code>, <code>decision</code>, <code>thresholds</code>.</span>
         </div>
       </form>
       <div id="resB" class="result" style="display:none;"></div>
@@ -130,19 +148,23 @@
           </div>
           <div class="field">
             <label>Writer ID (cliente)</label>
-            <input type="number" name="writer_id" placeholder="55" required>
+            <input type="number" id="writer_id_input" name="writer_id" placeholder="Detectar automáticamente" required>
             <span class="muted">Se buscará la genuina en <code>out/signatures_index.csv</code></span>
           </div>
         </div>
         <div class="row-3" style="margin-top:12px">
           <div class="field">
             <label>Ref sample id (opcional)</label>
-            <input type="number" name="ref_sample_id" placeholder="1">
+            <input type="number" id="ref_sample_id_input" name="ref_sample_id" placeholder="1">
           </div>
           <div class="field">
-            <label>High / Low threshold</label>
-            <input type="number" name="override_threshold" step="0.001" value="0.85">
-            <input type="number" name="low_threshold" step="0.001" value="0.80">
+            <label>Política + Umbrales (override opcional)</label>
+            <select name="policy">
+              <option value="dual" selected>dual (p85/p80)</option>
+              <option value="p85_only">p85_only</option>
+            </select>
+            <input type="number" name="override_threshold_high" step="0.001" value="0.85">
+            <input type="number" name="override_threshold_low" step="0.001" value="0.80">
           </div>
           <div class="field">
             <label>Doc / Cliente (opcionales)</label>
@@ -152,7 +174,7 @@
         </div>
         <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
           <button class="btn" id="btnC" type="submit">Validar por writer</button>
-          <span class="muted">Usa la genuina de referencia del writer</span>
+          <span class="muted">Detecta automáticamente el Writer ID según el nombre del archivo</span>
         </div>
       </form>
       <div id="resC" class="result" style="display:none;"></div>
@@ -163,6 +185,18 @@
 </div>
 
 <script>
+  // Defaults for thresholds on load (evita undefined)
+  document.addEventListener('DOMContentLoaded', () => {
+    const setDefault = (selector, val) => {
+      document.querySelectorAll(selector).forEach(inp => {
+        if (!inp.value || inp.value.trim() === '') inp.value = val;
+      });
+    };
+    setDefault('input[name="override_threshold_high"]', '0.85');
+    setDefault('input[name="override_threshold_low"]',  '0.80');
+    document.querySelectorAll('select[name="policy"]').forEach(s => s.value = 'dual');
+  });
+
   // Tabs
   const tabs = document.querySelectorAll('.tab');
   const panes = document.querySelectorAll('.pane');
@@ -188,12 +222,39 @@
     });
   });
 
-  // Preview Pane C
+  // Preview + Auto-detect writer_id y ref_sample_id en Pane C
   const fileC = document.querySelector('#frmC input[name="probe"]');
   const prevC = document.getElementById('prevC');
+  const writerInput = document.getElementById('writer_id_input');
+  const refSampleInput = document.getElementById('ref_sample_id_input');
+
   fileC.addEventListener('change', e => {
     const f = e.target.files[0];
-    if (f) { prevC.src = URL.createObjectURL(f); prevC.style.display='block'; }
+    if (f) {
+      // preview
+      prevC.src = URL.createObjectURL(f);
+      prevC.style.display='block';
+
+      // intentar extraer writer_id y sample_id del nombre
+      // patrones: original_{id}_{sample}.png | forgeries_{id}_{sample}.png
+      const name = f.name.toLowerCase();
+      const m = name.match(/(?:original|forgeries)_(\d+)_(\d+)\./);
+      if (m) {
+        const wid = m[1], sid = m[2];
+        writerInput.value = wid;
+        writerInput.style.borderColor = '#3b82f6';
+        // sugerimos sample_id detectado (si no lo quiere, lo puede editar o borrar)
+        //refSampleInput.value = sid;
+        refSampleInput.style.borderColor = '#3b82f6';
+      } else {
+        writerInput.value = '';
+        writerInput.placeholder = 'Detectar automáticamente';
+        writerInput.style.borderColor = '#e5e7eb';
+        refSampleInput.value = '';
+        refSampleInput.placeholder = '1';
+        refSampleInput.style.borderColor = '#e5e7eb';
+      }
+    }
   });
 
   // ---- Pane A submit ----
@@ -202,8 +263,11 @@
     e.preventDefault(); resA.style.display='none'; btnA.disabled=true; btnA.textContent='Procesando...';
     try{
       const fd = new FormData(frmA);
-      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
-      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      // fuerza defaults si vienen vacíos
+      if(!fd.get('override_threshold_high')) fd.set('override_threshold_high','0.85');
+      if(!fd.get('override_threshold_low'))  fd.set('override_threshold_low','0.80');
+      if(!fd.get('policy')) fd.set('policy','dual');
+
       const rsp = await fetch('/score', { method:'POST', body: fd });
       const j = await rsp.json();
       const badge = j.decision === 'auto_validado'
@@ -214,9 +278,9 @@
       show(resA, `
         <div style="display:flex; gap:12px; align-items:center;">
           ${badge}
-          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold} · <b>Low:</b> ${j.threshold_low}</div>
+          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold_high} · <b>Low:</b> ${j.threshold_low}</div>
         </div>
-        <div class="muted" style="margin-top:6px;">Modelo: ${j.model_version} · Calib: ${j.calibration_version} · Lat: ${j.latency_ms} ms</div>
+        <div class="muted" style="margin-top:6px;">Policy: ${j.policy} · Modelo: ${j.model_version} · Calib: ${j.calibration_version} · Lat: ${j.latency_ms} ms</div>
       `);
     }catch(err){ show(resA, `<span class="pill err">ERROR</span> ${err}`); }
     finally{ btnA.disabled=false; btnA.textContent='Validar'; }
@@ -228,8 +292,10 @@
     e.preventDefault(); resB.style.display='none'; btnB.disabled=true; btnB.textContent='Procesando...';
     try{
       const fd = new FormData(frmB);
-      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
-      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      if(!fd.get('override_threshold_high')) fd.set('override_threshold_high','0.85');
+      if(!fd.get('override_threshold_low'))  fd.set('override_threshold_low','0.80');
+      if(!fd.get('policy')) fd.set('policy','dual');
+
       const rsp = await fetch('/score_csv_upload', { method:'POST', body: fd });
       const j = await rsp.json();
       show(resB, `
@@ -248,8 +314,10 @@
     e.preventDefault(); resC.style.display='none'; btnC.disabled=true; btnC.textContent='Procesando...';
     try{
       const fd = new FormData(frmC);
-      if(!fd.get('override_threshold')) fd.set('override_threshold','0.85');
-      if(!fd.get('low_threshold'))      fd.set('low_threshold','0.80');
+      if(!fd.get('override_threshold_high')) fd.set('override_threshold_high','0.85');
+      if(!fd.get('override_threshold_low'))  fd.set('override_threshold_low','0.80');
+      if(!fd.get('policy')) fd.set('policy','dual');
+
       const rsp = await fetch('/score_writer', { method:'POST', body: fd });
       const j = await rsp.json();
       const badge = j.decision === 'auto_validado'
@@ -260,9 +328,9 @@
       show(resC, `
         <div style="display:flex; gap:12px; align-items:center;">
           ${badge}
-          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold} · <b>Low:</b> ${j.threshold_low}</div>
+          <div><b>Score:</b> ${j.score} · <b>Hi:</b> ${j.threshold_high} · <b>Low:</b> ${j.threshold_low}</div>
         </div>
-        <div class="muted" style="margin-top:6px;">Ref usada: <code>${j.ref_path_used}</code></div>
+        <div class="muted" style="margin-top:6px;">Policy: ${j.policy} · Ref usada: <code>${j.ref_path_used}</code></div>
       `);
     }catch(err){ show(resC, `<span class="pill err">ERROR</span> ${err}`); }
     finally{ btnC.disabled=false; btnC.textContent='Validar por writer'; }

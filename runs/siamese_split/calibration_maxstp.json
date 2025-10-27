@@ -1,0 +1,19 @@
+{
+  "model_checkpoint": "runs/siamese_split/best.pt",
+  "temperature": 1.0,
+  "thresholds": {
+    "p85": {
+      "threshold": 0.00619,
+      "precision": 0.851064,
+      "recall": 1.0,
+      "stp_proxy": 0.5875
+    },
+    "p80": {
+      "threshold": 0.004764,
+      "precision": 0.8,
+      "recall": 1.0,
+      "stp_proxy": 0.625
+    }
+  },
+  "created_at": "2025-10-26T23:17:36.372739"
+}

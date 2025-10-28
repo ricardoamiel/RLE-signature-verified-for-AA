@@ -7,9 +7,9 @@ matplotlib==3.9.2
 pillow==10.4.0
 
 # PyTorch (usa CUDA 12.x si tienes GPU, o CPU-only si no)
-torch==2.3.1
-torchvision==0.18.1
-torchaudio==2.3.1
+#torch==2.3.1
+#torchvision==0.18.1
+#torchaudio==2.3.1
 
 # FastAPI + Server
 fastapi==0.115.2

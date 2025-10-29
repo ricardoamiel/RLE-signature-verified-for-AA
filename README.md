@@ -98,8 +98,7 @@ La API FastAPI se integra con bots del **Control Room** para automatizar todo el
 
 1. **Bot_Ingest:** recibe documentos o imágenes desde correo o carpeta compartida (capa Bronze -> capa Silver).  
 2. **Bot_Verify:** llama a los endpoints `/score`, `/score_csv_upload` o `/score_writer`.  
-3. **Bot_Reviewer:** revisa automáticamente los casos `revisión_rápida` o `manual`.  
-4. **Bot_Export:** consolida métricas en un CSV compartido o dashboard Power BI (capa Silver -> capa Gold).
+3. **Bot_Dashboard:** revisa automáticamente los casos `revisión_rápida` o `manual`, y consolida métricas en un CSV compartido o dashboard Power BI (capa Silver -> capa Gold).
 
 Esto garantiza **trazabilidad completa**, control de versiones de modelo y auditoría de decisiones (STP, revisiones, latencias y precisión real).
 

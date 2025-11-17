@@ -108,3 +108,12 @@ timestamp,doc_id,client_id,writer_id,ref_path,probe_path,score,threshold_high,th
 2025-10-28T03:12:17.991672,,,3,signatures/full_org/original_3_1.png,forgeries_3_16.png,0.004674,calib(dual)+writer,0.0072498624213039875,0.006231527775526047,revision_manual,best.pt,calibration_maxstp.json,0,ok
 2025-10-28T03:12:18.182053,,,3,signatures/full_org/original_3_1.png,original_3_18.png,0.961548,calib(dual)+writer,0.0072498624213039875,0.006231527775526047,auto_validado,best.pt,calibration_maxstp.json,0,ok
 2025-10-28T03:12:18.321651,,,3,signatures/full_org/original_3_1.png,original_3_19.png,0.884573,calib(dual)+writer,0.0072498624213039875,0.006231527775526047,auto_validado,best.pt,calibration_maxstp.json,0,ok
+2025-11-17T00:00:58.566338,,,,original_9_8.png,forgeries_9_22.png,0.042039,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,319,ok
+2025-11-17T00:01:14.026021,,,,original_9_8.png,forgeries_8_19.png,0.006823,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,22,ok
+2025-11-17T00:01:28.481323,,,,original_9_8.png,forgeries_47_2.png,0.002653,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,17,ok
+2025-11-17T00:01:40.519669,,,,original_9_8.png,original_52_8.png,0.55631,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,17,ok
+2025-11-17T00:01:57.910347,,,,original_9_8.png,original_41_4.png,0.949247,override(dual),0.85,0.8,auto_validado,best.pt,calibration_maxstp.json,22,ok
+2025-11-17T00:02:09.007696,,,52,signatures/full_org/original_52_1.png,original_52_8.png,0.731595,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,0,ok
+2025-11-17T00:02:16.564011,,,41,signatures/full_org/original_41_1.png,original_41_4.png,0.890374,override(dual),0.85,0.8,auto_validado,best.pt,calibration_maxstp.json,0,ok
+2025-11-17T00:10:19.830555,,,52,signatures/full_org/original_52_1.png,original_52_8.png,0.731595,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,0,ok
+2025-11-17T00:18:43.470542,,,43,signatures/full_org/original_43_1.png,forgeries_43_11.png,0.002845,override(dual),0.85,0.8,revision_manual,best.pt,calibration_maxstp.json,0,ok

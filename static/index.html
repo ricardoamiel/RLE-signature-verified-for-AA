@@ -52,8 +52,7 @@
 
     <div class="tabs">
       <button class="tab active" data-pane="pane-a">A) Dos imágenes</button>
-      <button class="tab" data-pane="pane-b">B) CSV de pares</button>
-      <button class="tab" data-pane="pane-c">C) Una imagen + writer_id</button>
+      <button class="tab" data-pane="pane-c">B) Una imagen + writer_id</button>
     </div>
 
     <!-- ========== PANE A: /score ========== -->
@@ -107,34 +106,6 @@
         </div>
       </form>
       <div id="resA" class="result" style="display:none;"></div>
-    </div>
-
-    <!-- ========== PANE B: /score_csv_upload ========== -->
-    <div id="pane-b" class="pane">
-      <form id="frmB">
-        <div class="row-2">
-          <div class="field">
-            <label>CSV de pares (columnas: <code>img1,img2</code>)</label>
-            <input type="file" name="csv_file" accept=".csv" required>
-            <span class="muted">Rutas accesibles por el servidor</span>
-          </div>
-          <div class="field">
-            <label>Política + Umbrales (override opcional)</label>
-            <select name="policy">
-              <option value="dual" selected>dual (p85/p80)</option>
-              <option value="p85_only">p85_only</option>
-            </select>
-            <input type="number" name="override_threshold_high" step="0.001" value="0.85">
-            <input type="number" name="override_threshold_low" step="0.001" value="0.80">
-            <span class="muted">Si los dejas vacíos → calibración/defecto</span>
-          </div>
-        </div>
-        <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
-          <button class="btn" id="btnB" type="submit">Procesar CSV</button>
-          <span class="muted">Devuelve CSV con <code>score</code>, <code>decision</code>, <code>thresholds</code>.</span>
-        </div>
-      </form>
-      <div id="resB" class="result" style="display:none;"></div>
     </div>
 
     <!-- ========== PANE C: /score_writer ========== -->
@@ -284,28 +255,6 @@
       `);
     }catch(err){ show(resA, `<span class="pill err">ERROR</span> ${err}`); }
     finally{ btnA.disabled=false; btnA.textContent='Validar'; }
-  });
-
-  // ---- Pane B submit ----
-  const frmB = document.getElementById('frmB'), btnB = document.getElementById('btnB'), resB = document.getElementById('resB');
-  frmB.addEventListener('submit', async (e) => {
-    e.preventDefault(); resB.style.display='none'; btnB.disabled=true; btnB.textContent='Procesando...';
-    try{
-      const fd = new FormData(frmB);
-      if(!fd.get('override_threshold_high')) fd.set('override_threshold_high','0.85');
-      if(!fd.get('override_threshold_low'))  fd.set('override_threshold_low','0.80');
-      if(!fd.get('policy')) fd.set('policy','dual');
-
-      const rsp = await fetch('/score_csv_upload', { method:'POST', body: fd });
-      const j = await rsp.json();
-      show(resB, `
-        <span class="pill ok">CSV PROCESADO</span>
-        <div class="muted" style="margin-top:6px;">
-          Filas: <b>${j.rows}</b> · Avg latencia: <b>${j.avg_latency_ms} ms</b> · Guardado en: <code>${j.saved}</code>
-        </div>
-      `);
-    }catch(err){ show(resB, `<span class="pill err">ERROR</span> ${err}`); }
-    finally{ btnB.disabled=false; btnB.textContent='Procesar CSV'; }
   });
 
   // ---- Pane C submit ----

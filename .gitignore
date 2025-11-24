@@ -32,3 +32,12 @@ tmp/
 
 # --- Signature datasets ---
 signatures/
+
+#output for bots
+landing/
+out/
+queue/
+test_local_call.py
+original_*.jpg
+sample_*.jpg
+forgeries_*.jpg
